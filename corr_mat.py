@@ -29,6 +29,7 @@ paths=('4_pre/', '15/', '4_post/')
 
 if flag==0:
 	for path in paths:
+		tt=0
 		print(path)
 		for t in range(start,end,increase):
 			for i in range(0,CG):
