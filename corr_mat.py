@@ -15,23 +15,24 @@ else:
 	sys.exit()
 
 # parameters
-CG=6 # number of CG (coarse-grained) pixels
+CG=7 # number of CG (coarse-grained) pixels
 start=9999 # start step
 end=19999 # end step
-increase=50 # spacing between consecutive steps
-timesteps=int((end-start)/increase) # number of timeframes
+increase=50 # spacing between consecutive steps - this is related to what originally done with A_t_cg.{}.txt and all_conductances.txt. I cannot sample more frequently than every "increase" MC steps
+skip=1 #in case you want to read only every "skip" steps (i.e. every skip*increase) within all_conductances.txt. Default value: skip=1.
+timesteps=int((end-start)/(increase*skip)) # total number of available timeframes
 
 time_series=np.empty([timesteps,CG])
 corr_matrix=np.zeros([CG,CG])
 tt=0
 
-paths=('4_pre/', '15/', '4_post/')
+paths=('1_pre/', '15/', '1_post/')
 
 if flag==0:
 	for path in paths:
 		tt=0
 		print(path)
-		for t in range(start,end,increase):
+		for t in range(start,end,int(increase*skip)):
 			for i in range(0,CG):
 				for j in range (0,CG):
 					r=np.loadtxt(path+'A_t_cg.{}.txt'.format(t),unpack=True,usecols=(0,))
@@ -42,10 +43,10 @@ else:
 	for path in paths:
 		tt=0
 		print(path)
-		for t in range(start,end,increase):
+		for t in range(start,end,int(increase*skip)):
 			for i in range(0,CG):
 				for j in range (0,CG):
-					r=np.loadtxt(path+'all_conductances.txt',unpack=True,usecols=(0,),skiprows=CG*tt*increase,max_rows=CG)
+					r=np.loadtxt(path+'all_conductances.txt',unpack=True,usecols=(0,),skiprows=CG*tt*skip,max_rows=CG)
 				time_series[tt]=r
 			tt+=1
 
