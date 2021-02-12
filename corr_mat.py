@@ -54,11 +54,15 @@ else:
 	
 		#plot
 		plt.clf()
+		plt.rcParams['xtick.labelsize']=18
+		plt.rcParams['ytick.labelsize']=18
 		color_map = plt.cm.get_cmap('coolwarm')
 		reversed_color_map = color_map.reversed()
 		plt.xlabel("Pixels",fontsize=15)
 		plt.ylabel("Pixels",fontsize=15)
 		plt.imshow(A,cmap=reversed_color_map)
 		plt.clim(-1,1)
-		plt.colorbar()
+		cbar = plt.colorbar()
+		for t in cbar.ax.get_yticklabels():
+     			t.set_fontsize(20)
 		plt.savefig(path+'corr_mat.png',dpi=300)
